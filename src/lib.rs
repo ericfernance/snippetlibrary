@@ -1,8 +1,20 @@
 use std::fs::{read_dir};
 use std::path::Path;
 
+#[derive(Default)]
 pub struct Snippet{
+    path: String,
+    title: String,
+    content: String
+}
 
+impl Snippet {
+    pub fn new(path: String) -> Snippet{
+        Snippet {
+            path: path,
+            ..Default::default()
+        }
+    }
 }
 
 pub struct SnippetCollection {
@@ -25,12 +37,15 @@ impl SnippetCollection {
     }
 
     pub fn get_snippets(&self) -> Vec<Snippet>{
+        let mut snippets: Vec<Snippet> = vec![];
         let dir_path = Path::new(self.path.as_str());
         for entry in read_dir(dir_path).unwrap(){
             let entry_path = entry.unwrap().path();
-            println!("************************* {}", entry_path.into_os_string().into_string().unwrap())
+            snippets.push(Snippet::new(entry_path.into_os_string().into_string().unwrap()));
         }
-        vec![]
+        snippets
     }
+
+    pub fn add_snippet(&self,snippet: Snippet){}
 }
 

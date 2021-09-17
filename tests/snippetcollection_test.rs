@@ -1,6 +1,6 @@
 use tempfile::tempdir;
 use std::fs::File;
-use std::io::{self, Write};
+use std::io::{ Write};
 use std::vec::Vec;
 
 use snippetlibrary::{SnippetCollection, Snippet};
@@ -22,7 +22,7 @@ fn it_can_load_snippets() {
 
     let file_path = dir.path().join("a-php-file.php");
     let mut file = File::create(file_path).expect("Problem");
-    writeln!(file, "<?php echo 'hello';?>").expect("Could not write");;
+    writeln!(file, "<?php echo 'hello';?>").expect("Could not write");
 
     let collection=  SnippetCollection::new(path);
     let snippets: Vec<Snippet> = collection.get_snippets();
