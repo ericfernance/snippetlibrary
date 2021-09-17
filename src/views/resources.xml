@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/com/thisisericrobert/snippetlibrary">
+        <file>main.glade</file>
+        <!--<file>jsonphp.ui</file>
+        <file>md5.ui</file>
+        <file>stringlength.ui</file>-->
+    </gresource>
+</gresources>
