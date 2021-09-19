@@ -5,6 +5,8 @@ use std::vec::Vec;
 
 use snippetlibrary::{SnippetCollection, Snippet};
 
+mod test_functions;
+
 
 #[test]
 fn it_can_set_path(){
