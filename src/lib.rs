@@ -1,10 +1,11 @@
-use std::fs::{read_dir};
+use std::fs::{read_dir };
 use std::path::Path;
+use std::fs::File;
+use std::io::Read;
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Snippet{
     path: String,
-    title: String,
     content: String
 }
 
@@ -15,6 +16,25 @@ impl Snippet {
             ..Default::default()
         }
     }
+
+    pub fn path(&self)->&str{
+        self.path.as_str()
+    }
+
+    pub fn title(&self)->&str {
+        self.path.split("/").into_iter().last().unwrap()
+    }
+
+    pub fn extension(&self) -> &str {
+        self.title().split(".").into_iter().last().unwrap()
+    }
+
+    pub fn content(&self) -> String {
+        let mut file = File::open(Path::new(self.path())).unwrap();
+        let mut contents = String::new();
+        file.read_to_string(&mut contents).unwrap();
+        contents.to_string()
+    }
 }
 
 pub struct SnippetCollection {
@@ -22,9 +42,6 @@ pub struct SnippetCollection {
 }
 
 impl SnippetCollection {
-    pub fn you_suck(&self) {
-        println!("you suck");
-    }
 
     pub fn new(path: String) -> SnippetCollection{
         SnippetCollection {
@@ -32,11 +49,11 @@ impl SnippetCollection {
         }
     }
 
-    pub fn get_path(&self) -> &str {
+    pub fn path(&self) -> &str {
         self.path.as_str()
     }
 
-    pub fn get_snippets(&self) -> Vec<Snippet>{
+    pub fn snippets(&self) -> Vec<Snippet>{
         let mut snippets: Vec<Snippet> = vec![];
         let dir_path = Path::new(self.path.as_str());
         for entry in read_dir(dir_path).unwrap(){

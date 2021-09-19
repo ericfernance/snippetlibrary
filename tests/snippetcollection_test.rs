@@ -12,7 +12,7 @@ fn it_can_set_path(){
     let path=  dir.path().to_str().unwrap().to_string();
 
     let collection=  SnippetCollection::new(path);
-    assert_eq!(dir.path().to_str().unwrap().to_string(), collection.get_path());
+    assert_eq!(dir.path().to_str().unwrap().to_string(), collection.path());
 }
 #[test]
 fn it_can_load_snippets() {
@@ -25,7 +25,7 @@ fn it_can_load_snippets() {
     writeln!(file, "<?php echo 'hello';?>").expect("Could not write");
 
     let collection=  SnippetCollection::new(path);
-    let snippets: Vec<Snippet> = collection.get_snippets();
+    let snippets: Vec<Snippet> = collection.snippets();
 
     assert_eq!(1, snippets.len());
 }
