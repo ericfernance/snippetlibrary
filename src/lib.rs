@@ -2,6 +2,11 @@ use std::fs::{read_dir };
 use std::path::Path;
 use std::fs::File;
 use std::io::Read;
+use gtk::glib::StaticType;
+use gtk::cairo::glib::Type;
+use gtk::subclass::prelude::*;
+use gtk::glib;
+
 
 #[derive(Default, Debug)]
 pub struct Snippet{
@@ -36,6 +41,8 @@ impl Snippet {
         contents.to_string()
     }
 }
+
+
 
 pub struct SnippetCollection {
     path: String,
