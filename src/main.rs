@@ -1,4 +1,4 @@
-mod todo_object;
+mod snippet_object;
 mod snippet_row;
 mod window;
 
@@ -14,7 +14,7 @@ fn main() {
 
     // Create a new application
     let app = Application::builder()
-        .application_id("org.gtk-rs.Todo")
+        .application_id("com.thisisericrobert.snippetlibrary")
         .build();
 
     // Connect to "activate" signal of `app`

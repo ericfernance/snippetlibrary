@@ -1,6 +1,6 @@
 mod imp;
 
-use crate::todo_object::TodoObject;
+use crate::snippet_object::SnippetObject;
 use crate::snippet_row::SnippetRow;
 use glib::{clone, Object};
 use gtk::prelude::*;
@@ -29,14 +29,14 @@ impl Window {
 
     fn setup_model(&self) {
         // Create new model
-        let model = gio::ListStore::new(TodoObject::static_type());
+        let model = gio::ListStore::new(SnippetObject::static_type());
 
         // Get state and set model
         let imp = imp::Window::from_instance(self);
         imp.model.set(model).expect("Could not set model");
 
         // Add some items to the model.
-        self.model().append(&TodoObject::new(false,"Testing".to_string()));
+        self.model().append(&SnippetObject::new(false,"Testing".to_string()));
 
         // Wrap model with selection and pass it to the list view
         let selection_model = NoSelection::new(Some(self.model()));
@@ -49,13 +49,13 @@ impl Window {
         let model = self.model();
 
         // Setup callback so that activation
-        // creates a new todo object and clears the entry
+        // creates a new snippet object and clears the entry
         imp.entry
             .connect_activate(clone!(@weak model => move |entry| {
                 let buffer = entry.buffer();
                 let content = buffer.text();
-                let todo_object = TodoObject::new(false, content);
-                model.append(&todo_object);
+                let snippet_object = SnippetObject::new(false, content);
+                model.append(&snippet_object);
                 buffer.set_text("");
             }));
     }
@@ -71,14 +71,14 @@ impl Window {
             list_item.set_child(Some(&snippet_row));
         });
 
-        // Tell factory how to bind `TodoRow` to a `TodoObject`
+        // Tell factory how to bind `TodoRow` to a `SnippetObject`
         factory.connect_bind(move |_, list_item| {
-            // Get `TodoObject` from `ListItem`
-            let todo_object = list_item
+            // Get `SnippetObject` from `ListItem`
+            let snippet_object = list_item
                 .item()
                 .expect("The item has to exist.")
-                .downcast::<TodoObject>()
-                .expect("The item has to be an `TodoObject`.");
+                .downcast::<SnippetObject>()
+                .expect("The item has to be an `SnippetObject`.");
 
             // Get `SnippetRow` from `ListItem`
             let snippet_row = list_item
@@ -87,10 +87,10 @@ impl Window {
                 .downcast::<SnippetRow>()
                 .expect("The child has to be a `SnippetRow`.");
 
-            snippet_row.bind(&todo_object);
+            snippet_row.bind(&snippet_object);
         });
 
-        // Tell factory how to unbind `SnippetRow` from `TodoObject`
+        // Tell factory how to unbind `SnippetRow` from `SnippetObject`
         factory.connect_unbind(move |_, list_item| {
             // Get `SnippetRow` from `ListItem`
             let snippet_row = list_item
