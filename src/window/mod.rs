@@ -1,7 +1,7 @@
 mod imp;
 
 use crate::todo_object::TodoObject;
-use crate::todo_row::TodoRow;
+use crate::snippet_row::SnippetRow;
 use glib::{clone, Object};
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
@@ -35,6 +35,9 @@ impl Window {
         let imp = imp::Window::from_instance(self);
         imp.model.set(model).expect("Could not set model");
 
+        // Add some items to the model.
+        self.model().append(&TodoObject::new(false,"Testing".to_string()));
+
         // Wrap model with selection and pass it to the list view
         let selection_model = NoSelection::new(Some(self.model()));
         imp.list_view.set_model(Some(&selection_model));
@@ -61,11 +64,11 @@ impl Window {
         // Create a new factory
         let factory = SignalListItemFactory::new();
 
-        // Create an empty `TodoRow` during setup
+        // Create an empty `SnippetRow` during setup
         factory.connect_setup(move |_, list_item| {
             // Create `TodoRow`
-            let todo_row = TodoRow::new();
-            list_item.set_child(Some(&todo_row));
+            let snippet_row = SnippetRow::new();
+            list_item.set_child(Some(&snippet_row));
         });
 
         // Tell factory how to bind `TodoRow` to a `TodoObject`
@@ -77,26 +80,26 @@ impl Window {
                 .downcast::<TodoObject>()
                 .expect("The item has to be an `TodoObject`.");
 
-            // Get `TodoRow` from `ListItem`
-            let todo_row = list_item
+            // Get `SnippetRow` from `ListItem`
+            let snippet_row = list_item
                 .child()
                 .expect("The child has to exist.")
-                .downcast::<TodoRow>()
-                .expect("The child has to be a `TodoRow`.");
+                .downcast::<SnippetRow>()
+                .expect("The child has to be a `SnippetRow`.");
 
-            todo_row.bind(&todo_object);
+            snippet_row.bind(&todo_object);
         });
 
-        // Tell factory how to unbind `TodoRow` from `TodoObject`
+        // Tell factory how to unbind `SnippetRow` from `TodoObject`
         factory.connect_unbind(move |_, list_item| {
-            // Get `TodoRow` from `ListItem`
-            let todo_row = list_item
+            // Get `SnippetRow` from `ListItem`
+            let snippet_row = list_item
                 .child()
                 .expect("The child has to exist.")
-                .downcast::<TodoRow>()
-                .expect("The child has to be a `TodoRow`.");
+                .downcast::<SnippetRow>()
+                .expect("The child has to be a `SnippetRow`.");
 
-            todo_row.unbind();
+            snippet_row.unbind();
         });
 
         // Set the factory of the list view

@@ -1,5 +1,5 @@
 mod todo_object;
-mod todo_row;
+mod snippet_row;
 mod window;
 
 use gtk::prelude::*;

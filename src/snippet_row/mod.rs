@@ -8,30 +8,30 @@ use gtk::{glib, pango};
 use pango::{AttrList, Attribute};
 
 glib::wrapper! {
-    pub struct TodoRow(ObjectSubclass<imp::TodoRow>)
+    pub struct SnippetRow(ObjectSubclass<imp::SnippetRow>)
     @extends gtk::Box, gtk::Widget,
     @implements gtk::Accessible, gtk::Buildable, gtk::ConstraintTarget, gtk::Orientable;
 }
 
-impl Default for TodoRow {
+impl Default for SnippetRow {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl TodoRow {
+impl SnippetRow {
     pub fn new() -> Self {
-        Object::new(&[]).expect("Failed to create `TodoRow`.")
+        Object::new(&[]).expect("Failed to create `SnippetRow`.")
     }
 
     pub fn bind(&self, todo_object: &TodoObject) {
         // Get state
-        let imp = imp::TodoRow::from_instance(self);
+        let imp = imp::SnippetRow::from_instance(self);
         let completed_button = imp.completed_button.get();
         let content_label = imp.content_label.get();
         let mut bindings = imp.bindings.borrow_mut();
 
-        // Bind `todo_object.completed` to `todo_row.completed_button.active`
+        // Bind `todo_object.completed` to `snippet_row.completed_button.active`
         let completed_button_binding = todo_object
             .bind_property("completed", &completed_button, "active")
             .flags(BindingFlags::SYNC_CREATE | BindingFlags::BIDIRECTIONAL)
@@ -40,7 +40,7 @@ impl TodoRow {
         // Save binding
         bindings.push(completed_button_binding);
 
-        // Bind `todo_object.content` to `todo_row.content_label.label`
+        // Bind `todo_object.content` to `snippet_row.content_label.label`
         let content_label_binding = todo_object
             .bind_property("content", &content_label, "label")
             .flags(BindingFlags::SYNC_CREATE)
@@ -49,7 +49,7 @@ impl TodoRow {
         // Save binding
         bindings.push(content_label_binding);
 
-        // Bind `todo_object.completed` to `todo_row.content_label.attributes`
+        // Bind `todo_object.completed` to `snippet_row.content_label.attributes`
         let content_label_binding = todo_object
             .bind_property("completed", &content_label, "attributes")
             .flags(BindingFlags::SYNC_CREATE)
@@ -73,7 +73,7 @@ impl TodoRow {
 
     pub fn unbind(&self) {
         // Get state
-        let imp = imp::TodoRow::from_instance(self);
+        let imp = imp::SnippetRow::from_instance(self);
 
         // Unbind all stored bindings
         for binding in imp.bindings.borrow_mut().drain(..) {

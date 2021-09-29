@@ -6,8 +6,8 @@ use std::cell::RefCell;
 
 // Object holding the state
 #[derive(Default, CompositeTemplate)]
-#[template(file = "todo_row.ui")]
-pub struct TodoRow {
+#[template(file = "snippet_row.ui")]
+pub struct SnippetRow {
     #[template_child]
     pub completed_button: TemplateChild<CheckButton>,
     #[template_child]
@@ -18,10 +18,10 @@ pub struct TodoRow {
 
 // The central trait for subclassing a GObject
 #[glib::object_subclass]
-impl ObjectSubclass for TodoRow {
+impl ObjectSubclass for SnippetRow {
     // `NAME` needs to match `class` attribute of template
-    const NAME: &'static str = "TodoRow";
-    type Type = super::TodoRow;
+    const NAME: &'static str = "SnippetRow";
+    type Type = super::SnippetRow;
     type ParentType = gtk::Box;
 
     fn class_init(klass: &mut Self::Class) {
@@ -34,10 +34,10 @@ impl ObjectSubclass for TodoRow {
 }
 
 // Trait shared by all GObjects
-impl ObjectImpl for TodoRow {}
+impl ObjectImpl for SnippetRow {}
 
 // Trait shared by all widgets
-impl WidgetImpl for TodoRow {}
+impl WidgetImpl for SnippetRow {}
 
 // Trait shared by all boxes
-impl BoxImpl for TodoRow {}
+impl BoxImpl for SnippetRow {}
