@@ -28,18 +28,6 @@ impl ObjectImpl for SnippetObject {
     fn properties() -> &'static [ParamSpec] {
         static PROPERTIES: Lazy<Vec<ParamSpec>> = Lazy::new(|| {
             vec![
-                ParamSpec::new_boolean(
-                    // Name
-                    "completed",
-                    // Nickname
-                    "completed",
-                    // Short description
-                    "completed",
-                    // Default value
-                    false,
-                    // The property can be read and written to
-                    ParamFlags::READWRITE,
-                ),
                 ParamSpec::new_string(
                     // Name
                     "content",
@@ -59,10 +47,6 @@ impl ObjectImpl for SnippetObject {
 
     fn set_property(&self, _obj: &Self::Type, _id: usize, value: &Value, pspec: &ParamSpec) {
         match pspec.name() {
-            "completed" => {
-                let input_value = value.get().expect("The value needs to be of type `bool`.");
-                self.data.borrow_mut().completed = input_value;
-            }
             "content" => {
                 let input_value = value
                     .get()
@@ -75,7 +59,6 @@ impl ObjectImpl for SnippetObject {
 
     fn property(&self, _obj: &Self::Type, _id: usize, pspec: &ParamSpec) -> Value {
         match pspec.name() {
-            "completed" => self.data.borrow().completed.to_value(),
             "content" => self.data.borrow().content.to_value(),
             _ => unimplemented!(),
         }

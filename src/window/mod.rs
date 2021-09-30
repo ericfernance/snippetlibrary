@@ -36,7 +36,7 @@ impl Window {
         imp.model.set(model).expect("Could not set model");
 
         // Add some items to the model.
-        self.model().append(&SnippetObject::new(false,"Testing".to_string()));
+        self.model().append(&SnippetObject::new("Testing".to_string()));
 
         // Wrap model with selection and pass it to the list view
         let selection_model = NoSelection::new(Some(self.model()));
@@ -54,7 +54,7 @@ impl Window {
             .connect_activate(clone!(@weak model => move |entry| {
                 let buffer = entry.buffer();
                 let content = buffer.text();
-                let snippet_object = SnippetObject::new(false, content);
+                let snippet_object = SnippetObject::new(content);
                 model.append(&snippet_object);
                 buffer.set_text("");
             }));

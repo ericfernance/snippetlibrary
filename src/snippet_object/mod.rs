@@ -8,14 +8,13 @@ glib::wrapper! {
 }
 
 impl SnippetObject {
-    pub fn new(completed: bool, content: String) -> Self {
-        Object::new(&[("completed", &completed), ("content", &content)])
+    pub fn new(content: String) -> Self {
+        Object::new(&[ ("content", &content)])
             .expect("Failed to create `SnippetObject`.")
     }
 }
 
 #[derive(Default)]
 pub struct SnippetData {
-    pub completed: bool,
     pub content: String,
 }
