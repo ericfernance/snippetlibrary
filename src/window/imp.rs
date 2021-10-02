@@ -41,6 +41,7 @@ impl ObjectImpl for Window {
 
         // Setup
         obj.setup_model();
+        obj.load_data();
         obj.setup_callbacks();
         obj.setup_factory();
     }

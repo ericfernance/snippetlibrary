@@ -8,6 +8,8 @@ use gtk::subclass::prelude::*;
 use gtk::{gio, glib};
 use gtk::{Application, NoSelection, SignalListItemFactory};
 
+use snippetlibrary::*;
+
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
         @extends gtk::ApplicationWindow, gtk::Window, gtk::Widget,
@@ -34,9 +36,6 @@ impl Window {
         // Get state and set model
         let imp = imp::Window::from_instance(self);
         imp.model.set(model).expect("Could not set model");
-
-        // Add some items to the model.
-        self.model().append(&SnippetObject::new("Testing".to_string()));
 
         // Wrap model with selection and pass it to the list view
         let selection_model = NoSelection::new(Some(self.model()));
@@ -105,5 +104,16 @@ impl Window {
         // Set the factory of the list view
         let imp = imp::Window::from_instance(self);
         imp.list_view.set_factory(Some(&factory));
+    }
+
+    pub fn load_data(&self){
+        let model = self.model();
+        let snippets = snippetlibrary::SnippetCollection::new("/home/eric/Desktop/testingsnippets".to_string());
+        for snippet in snippets.snippets(){
+            println!("{:?}",snippet);
+            model.append(&SnippetObject::new(snippet.path().to_string()));
+        }
+
+        println!("{:?}", model);
     }
 }
