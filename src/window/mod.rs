@@ -49,14 +49,14 @@ impl Window {
 
         // Setup callback so that activation
         // creates a new snippet object and clears the entry
-        imp.entry
+/*        imp.entry
             .connect_activate(clone!(@weak model => move |entry| {
                 let buffer = entry.buffer();
                 let content = buffer.text();
-                let snippet_object = SnippetObject::new(content);
-                model.append(&snippet_object);
-                buffer.set_text("");
-            }));
+                //let snippet_object = SnippetObject::new(content,"Nothing".to_string());
+                //model.append(&snippet_object);
+                //buffer.set_text("");
+            }));*/
     }
 
     fn setup_factory(&self) {
@@ -111,7 +111,7 @@ impl Window {
         let snippets = snippetlibrary::SnippetCollection::new("/home/eric/Desktop/testingsnippets".to_string());
         for snippet in snippets.snippets(){
             println!("{:?}",snippet);
-            model.append(&SnippetObject::new(snippet.path().to_string()));
+            model.append(&SnippetObject::new(snippet.path().to_string(), snippet.title().to_string()));
         }
 
         println!("{:?}", model);

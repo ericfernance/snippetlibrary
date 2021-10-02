@@ -8,8 +8,8 @@ glib::wrapper! {
 }
 
 impl SnippetObject {
-    pub fn new(content: String) -> Self {
-        Object::new(&[ ("content", &content)])
+    pub fn new(content: String, title: String) -> Self {
+        Object::new(&[ ("content", &content), ("title", &title)])
             .expect("Failed to create `SnippetObject`.")
     }
 }
@@ -17,4 +17,5 @@ impl SnippetObject {
 #[derive(Default)]
 pub struct SnippetData {
     pub content: String,
+    pub title: String,
 }

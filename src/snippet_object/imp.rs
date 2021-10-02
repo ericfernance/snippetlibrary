@@ -40,6 +40,7 @@ impl ObjectImpl for SnippetObject {
                     // The property can be read and written to
                     ParamFlags::READWRITE,
                 ),
+                ParamSpec::new_string("title","title","title",None, ParamFlags::READWRITE),
             ]
         });
         PROPERTIES.as_ref()
@@ -53,6 +54,10 @@ impl ObjectImpl for SnippetObject {
                     .expect("The value needs to be of type `String`.");
                 self.data.borrow_mut().content = input_value;
             }
+            "title"=>{
+                let input_value = value.get().expect("The value needs to be of type string");
+                self.data.borrow_mut().title = input_value;
+            }
             _ => unimplemented!(),
         }
     }
@@ -60,6 +65,7 @@ impl ObjectImpl for SnippetObject {
     fn property(&self, _obj: &Self::Type, _id: usize, pspec: &ParamSpec) -> Value {
         match pspec.name() {
             "content" => self.data.borrow().content.to_value(),
+            "title"=>self.data.borrow().title.to_value(),
             _ => unimplemented!(),
         }
     }
