@@ -27,13 +27,13 @@ impl SnippetRow {
     pub fn bind(&self, snippet_object: &SnippetObject) {
         // Get state
         let imp = imp::SnippetRow::from_instance(self);
-        let content_label = imp.content_label.get();
+        let path_label = imp.path_label.get();
         let title_label = imp.title_label.get();
         let mut bindings = imp.bindings.borrow_mut();
 
         // Bind `snippet_object.content` to `snippet_row.content_label.label`
-        let content_label_binding = snippet_object
-            .bind_property("content", &content_label, "label")
+        let path_label_binding = snippet_object
+            .bind_property("path", &path_label, "label")
             .flags(BindingFlags::SYNC_CREATE)
             .build()
             .expect("Could not bind properties");
@@ -44,7 +44,7 @@ impl SnippetRow {
             .expect("Could not bind title");
         // Save binding
         bindings.push(title_label_binding);
-        bindings.push(content_label_binding);
+        bindings.push(path_label_binding);
 
     }
 

@@ -30,11 +30,11 @@ impl ObjectImpl for SnippetObject {
             vec![
                 ParamSpec::new_string(
                     // Name
-                    "content",
+                    "path",
                     // Nickname
-                    "content",
+                    "path",
                     // Short description
-                    "content",
+                    "path",
                     // Default value
                     None,
                     // The property can be read and written to
@@ -48,11 +48,11 @@ impl ObjectImpl for SnippetObject {
 
     fn set_property(&self, _obj: &Self::Type, _id: usize, value: &Value, pspec: &ParamSpec) {
         match pspec.name() {
-            "content" => {
+            "path" => {
                 let input_value = value
                     .get()
                     .expect("The value needs to be of type `String`.");
-                self.data.borrow_mut().content = input_value;
+                self.data.borrow_mut().path = input_value;
             }
             "title"=>{
                 let input_value = value.get().expect("The value needs to be of type string");
@@ -64,7 +64,7 @@ impl ObjectImpl for SnippetObject {
 
     fn property(&self, _obj: &Self::Type, _id: usize, pspec: &ParamSpec) -> Value {
         match pspec.name() {
-            "content" => self.data.borrow().content.to_value(),
+            "path" => self.data.borrow().path.to_value(),
             "title"=>self.data.borrow().title.to_value(),
             _ => unimplemented!(),
         }

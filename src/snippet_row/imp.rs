@@ -9,7 +9,7 @@ use std::cell::RefCell;
 #[template(file = "snippet_row.ui")]
 pub struct SnippetRow {
     #[template_child]
-    pub content_label: TemplateChild<Label>,
+    pub path_label: TemplateChild<Label>,
     #[template_child]
     pub title_label: TemplateChild<Label>,
     // Vector holding the bindings to properties of `TodoObject`
