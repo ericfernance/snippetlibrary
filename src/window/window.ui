@@ -30,6 +30,29 @@
                                 <property name="vexpand">true</property>
                             </object>
                         </child>
+                        <child>
+                            <object class="GtkBox">
+                                <property name="orientation">horizontal</property>
+                                <property name="vexpand">never</property>
+                                <property name="halign">end</property>
+                                <property name="hexpand">true</property>
+                                <child>
+                                    <object class="GtkButton">
+                                        <property name="label">Delete</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkButton">
+                                        <property name="label">Copy</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkButton">
+                                        <property name="label">Run</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
                     </object>
                 </child>
             </object>

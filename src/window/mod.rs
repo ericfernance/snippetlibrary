@@ -55,7 +55,11 @@ impl Window {
         imp.list_view.model().unwrap().connect_selection_changed(clone!(@strong self  as this => move |sel_model,position,items|{
             println!("in callback");
             println!("{:?}", this);
-            let item = sel_model.item(position).unwrap().downcast::<SnippetObject>().expect("Nope");
+
+            let sel_idx = sel_model.selection_in_range(0,1).nth(0);
+            println!("{:?}",sel_idx);
+
+            let item = sel_model.item(sel_idx).unwrap().downcast::<SnippetObject>().expect("Nope");
             let path = item.property("path").unwrap().transform::<String>().unwrap().get::<String>().unwrap();
             //println!("{:#?}", path);
             this.open_selected_snippet(path);
