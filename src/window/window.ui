@@ -1,33 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="LibraryWindow" parent="GtkApplicationWindow">
-    <property name="width_request">960</property>
-    <property name="title" translatable="yes">SnippetLibrary</property>
-    <child>
-      <object class="GtkBox">
-        <property name="orientation">horizontal</property>
-        <property name="margin-top">12</property>
-        <property name="margin-bottom">12</property>
-        <property name="margin-start">12</property>
-        <property name="margin-end">12</property>
-        <property name="spacing">6</property>
+    <template class="LibraryWindow" parent="GtkApplicationWindow">
+        <property name="width_request">960</property>
+        <property name="title" translatable="yes">SnippetLibrary</property>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="hscrollbar-policy">never</property>
-            <property name="min-content-height">360</property>
-            <property name="vexpand">true</property>
-            <child>
-              <object class="GtkListView" id="list_view"/>
-            </child>
-          </object>
+            <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">12</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="spacing">6</property>
+                <child>
+                    <object class="GtkScrolledWindow">
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="min-content-height">360</property>
+                        <property name="vexpand">true</property>
+                        <child>
+                            <object class="GtkListView" id="list_view"/>
+                        </child>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <child>
+                            <object class="GtkScrolledWindow" id="sourceview_window">
+                                <property name="hscrollbar-policy">never</property>
+                                <property name="vexpand">true</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
         </child>
-        <child>
-          <object class="GtkScrolledWindow" id="sourceview_window">
-            <property name="hscrollbar-policy">never</property>
-            <property name="vexpand">never</property>
-          </object>
-        </child>
-      </object>
-    </child>
-  </template>
+    </template>
 </interface>

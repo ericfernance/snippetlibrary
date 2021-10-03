@@ -147,5 +147,13 @@ impl Window {
     pub fn open_selected_snippet(&self, path: String){
         println!("open selected snippet");
         println!("the path is {:?}", path);
+        let snip = Snippet::new(path);
+        println!("{:?}",snip);
+        println!("{:?}", snip.content());
+        let imp = imp::Window::from_instance(self);
+        let sourceview = imp.sourceview_window.child().unwrap().downcast::<sourceview5::View>().unwrap();
+        let buffer = sourceview.buffer();
+        println!("{:?}",buffer);
+        buffer.set_text(&snip.content().to_string());
     }
 }

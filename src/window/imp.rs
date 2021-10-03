@@ -5,6 +5,7 @@ use gtk::{gio, glib, TextView, ScrolledWindow};
 use gtk::{CompositeTemplate, Entry, ListView};
 use once_cell::sync::OnceCell;
 use sourceview5::prelude::*;
+use std::cell::RefCell;
 
 // Object holding the state
 #[derive(CompositeTemplate, Default)]
