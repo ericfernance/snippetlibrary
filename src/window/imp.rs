@@ -1,18 +1,20 @@
 use glib::subclass::InitializingObject;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{gio, glib};
+use gtk::{gio, glib, TextView, ScrolledWindow};
 use gtk::{CompositeTemplate, Entry, ListView};
 use once_cell::sync::OnceCell;
+use sourceview5::prelude::*;
 
 // Object holding the state
 #[derive(CompositeTemplate, Default)]
 #[template(file = "window.ui")]
 pub struct Window {
     #[template_child]
-    pub entry: TemplateChild<Entry>,
-    #[template_child]
     pub list_view: TemplateChild<ListView>,
+    #[template_child]
+    pub sourceview_window: TemplateChild<ScrolledWindow>,
+
     pub model: OnceCell<gio::ListStore>,
 }
 
@@ -44,6 +46,7 @@ impl ObjectImpl for Window {
         obj.load_data();
         obj.setup_callbacks();
         obj.setup_factory();
+        obj.setup_sourceview();
     }
 }
 

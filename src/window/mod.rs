@@ -1,14 +1,17 @@
-mod imp;
+use glib::{clone, Object};
+use gtk::{gio, glib, SingleSelection};
+use gtk::{Application, NoSelection, SignalListItemFactory};
+use gtk::prelude::*;
+use gtk::subclass::prelude::*;
+
+use snippetlibrary::*;
 
 use crate::snippet_object::SnippetObject;
 use crate::snippet_row::SnippetRow;
-use glib::{clone, Object};
-use gtk::prelude::*;
-use gtk::subclass::prelude::*;
-use gtk::{gio, glib};
-use gtk::{Application, NoSelection, SignalListItemFactory};
+use sourceview5::prelude::{BufferExt, ViewExt};
+use sourceview5::LanguageManager;
 
-use snippetlibrary::*;
+mod imp;
 
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
@@ -38,7 +41,7 @@ impl Window {
         imp.model.set(model).expect("Could not set model");
 
         // Wrap model with selection and pass it to the list view
-        let selection_model = NoSelection::new(Some(self.model()));
+        let selection_model = SingleSelection::new(Some(self.model()));
         imp.list_view.set_model(Some(&selection_model));
     }
 
@@ -47,16 +50,12 @@ impl Window {
         let imp = imp::Window::from_instance(self);
         let model = self.model();
 
-        // Setup callback so that activation
-        // creates a new snippet object and clears the entry
-/*        imp.entry
-            .connect_activate(clone!(@weak model => move |entry| {
-                let buffer = entry.buffer();
-                let content = buffer.text();
-                //let snippet_object = SnippetObject::new(content,"Nothing".to_string());
-                //model.append(&snippet_object);
-                //buffer.set_text("");
-            }));*/
+        imp.list_view.model().unwrap().connect_selection_changed(|sel_model, position, items| {
+            println!("Selection changed");
+            let item = sel_model.item(position).unwrap().downcast::<SnippetObject>().expect("Nope");
+            println!("{:?}", item.property("path").unwrap());
+            println!("{:?}", item.property("title").unwrap());
+        });
     }
 
     fn setup_factory(&self) {
@@ -106,14 +105,39 @@ impl Window {
         imp.list_view.set_factory(Some(&factory));
     }
 
-    pub fn load_data(&self){
+    pub fn load_data(&self) {
         let model = self.model();
         let snippets = snippetlibrary::SnippetCollection::new("/home/eric/Desktop/testingsnippets".to_string());
-        for snippet in snippets.snippets(){
-            println!("{:?}",snippet);
+        for snippet in snippets.snippets() {
+            println!("{:?}", snippet);
             model.append(&SnippetObject::new(snippet.path().to_string(), snippet.title().to_string()));
         }
 
         println!("{:?}", model);
+    }
+
+    pub fn setup_sourceview(&self) {
+        println!("setup the sourceview");
+        let imp = imp::Window::from_instance(self);
+
+        let buffer = sourceview5::Buffer::new(None);
+        buffer.set_highlight_syntax(true);
+        if let Some(ref language) = sourceview5::LanguageManager::new().language("rust") {
+            buffer.set_language(Some(language));
+        }
+        if let Some(ref scheme) = sourceview5::StyleSchemeManager::new().scheme("solarized-light") {
+            buffer.set_style_scheme(Some(scheme));
+        }
+        buffer.set_text("");
+
+
+        let view = sourceview5::View::with_buffer(&buffer);
+        view.set_monospace(true);
+        view.set_background_pattern(sourceview5::BackgroundPatternType::Grid);
+        view.set_show_line_numbers(true);
+        view.set_highlight_current_line(true);
+        view.set_tab_width(4);
+        view.set_hexpand(true);
+        imp.sourceview_window.set_child(Some(&view));
     }
 }
