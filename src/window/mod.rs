@@ -117,7 +117,7 @@ impl Window {
     }
 
     pub fn setup_sourceview(&self) {
-        println!("setup the sourceview");
+        println!("setting up the sourceview");
         let imp = imp::Window::from_instance(self);
 
         let buffer = sourceview5::Buffer::new(None);
@@ -125,15 +125,15 @@ impl Window {
         if let Some(ref language) = sourceview5::LanguageManager::new().language("rust") {
             buffer.set_language(Some(language));
         }
-        if let Some(ref scheme) = sourceview5::StyleSchemeManager::new().scheme("solarized-light") {
+        /*if let Some(ref scheme) = sourceview5::StyleSchemeManager::new().scheme("solarized-light") {
             buffer.set_style_scheme(Some(scheme));
-        }
+        }*/
         buffer.set_text("");
 
 
         let view = sourceview5::View::with_buffer(&buffer);
         view.set_monospace(true);
-        view.set_background_pattern(sourceview5::BackgroundPatternType::Grid);
+        //view.set_background_pattern(sourceview5::BackgroundPatternType::Grid);
         view.set_show_line_numbers(true);
         view.set_highlight_current_line(true);
         view.set_tab_width(4);
