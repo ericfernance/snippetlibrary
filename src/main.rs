@@ -6,7 +6,8 @@ use gtk::prelude::*;
 use gtk::Application;
 
 use window::Window;
-
+#[macro_use]
+extern crate lazy_static;
 
 fn main() {
     // Initialize logger
@@ -29,3 +30,4 @@ fn build_ui(app: &Application) {
     let window = Window::new(app);
     window.show();
 }
+

@@ -795,6 +795,7 @@ dependencies = [
  "epoxy",
  "glium",
  "gtk4",
+ "lazy_static",
  "libloading",
  "once_cell",
  "sourceview5",

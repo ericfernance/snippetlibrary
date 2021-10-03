@@ -1,5 +1,5 @@
 use glib::{clone, Object};
-use gtk::{gio, glib, SingleSelection};
+use gtk::{gio, glib, SingleSelection, SelectionModel};
 use gtk::{Application, NoSelection, SignalListItemFactory};
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
@@ -10,6 +10,8 @@ use crate::snippet_object::SnippetObject;
 use crate::snippet_row::SnippetRow;
 use sourceview5::prelude::{BufferExt, ViewExt};
 use sourceview5::LanguageManager;
+use std::rc::Rc;
+use std::cell::RefCell;
 
 mod imp;
 
@@ -50,12 +52,14 @@ impl Window {
         let imp = imp::Window::from_instance(self);
         let model = self.model();
 
-        imp.list_view.model().unwrap().connect_selection_changed(|sel_model, position, items| {
-            println!("Selection changed");
+        imp.list_view.model().unwrap().connect_selection_changed(clone!(@strong self  as this => move |sel_model,position,items|{
+            println!("in callback");
+            println!("{:?}", this);
             let item = sel_model.item(position).unwrap().downcast::<SnippetObject>().expect("Nope");
-            println!("{:?}", item.property("path").unwrap());
-            println!("{:?}", item.property("title").unwrap());
-        });
+            let path = item.property("path").unwrap().transform::<String>().unwrap().get::<String>().unwrap();
+            //println!("{:#?}", path);
+            this.open_selected_snippet(path);
+        }));
     }
 
     fn setup_factory(&self) {
@@ -64,7 +68,7 @@ impl Window {
 
         // Create an empty `SnippetRow` during setup
         factory.connect_setup(move |_, list_item| {
-            // Create `TodoRow`
+            // Create `SnippetRow`
             let snippet_row = SnippetRow::new();
             list_item.set_child(Some(&snippet_row));
         });
@@ -112,7 +116,6 @@ impl Window {
             println!("{:?}", snippet);
             model.append(&SnippetObject::new(snippet.path().to_string(), snippet.title().to_string()));
         }
-
         println!("{:?}", model);
     }
 
@@ -139,5 +142,10 @@ impl Window {
         view.set_tab_width(4);
         view.set_hexpand(true);
         imp.sourceview_window.set_child(Some(&view));
+    }
+
+    pub fn open_selected_snippet(&self, path: String){
+        println!("open selected snippet");
+        println!("the path is {:?}", path);
     }
 }
