@@ -48,6 +48,7 @@ impl ObjectImpl for Window {
         obj.setup_callbacks();
         obj.setup_factory();
         obj.setup_sourceview();
+        obj.setup_actions();
     }
 }
 

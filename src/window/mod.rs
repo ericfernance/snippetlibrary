@@ -12,6 +12,7 @@ use sourceview5::prelude::{BufferExt, ViewExt};
 use sourceview5::LanguageManager;
 use std::rc::Rc;
 use std::cell::RefCell;
+use gtk::gio::SimpleAction;
 
 mod imp;
 
@@ -146,6 +147,17 @@ impl Window {
         view.set_tab_width(4);
         view.set_hexpand(true);
         imp.sourceview_window.set_child(Some(&view));
+    }
+
+    pub fn setup_actions(&self){
+        println!("Setup actions*****");
+        let imp = imp::Window::from_instance(self);
+        let original_state = 0;
+        let action_copy = SimpleAction::new_stateful("copy",None,&original_state.to_variant());
+        action_copy.connect_activate(|action,parameter| {
+            println!("received action copy");
+        });
+        self.add_action(&action_copy);
     }
 
     pub fn open_selected_snippet(&self, path: String){
