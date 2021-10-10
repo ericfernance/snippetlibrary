@@ -158,11 +158,7 @@ impl Window {
         let action_copy = SimpleAction::new_stateful("copy",None,&original_state.to_variant());
 
         action_copy.connect_activate(clone!(@strong self as this => move |action,parameter| {
-            println!("received action copy");
-            let snip = this.get_selected_item();
-            let mut ctx = ClipboardContext::new().unwrap();
-            ctx.set_contents(snip.content().to_owned()).unwrap();
-            println!("{:?}",ctx.get_contents());
+            this.copy_selected_snippet();
         }));
         self.add_action(&action_copy);
     }
@@ -181,9 +177,14 @@ impl Window {
     }
 
     pub fn copy_selected_snippet(&self){
-
+        println!("received action copy");
+        let snip = self.get_selected_item();
+        let mut ctx = ClipboardContext::new().unwrap();
+        ctx.set_contents(snip.content().to_owned()).unwrap();
+        println!("{:?}",ctx.get_contents());
     }
 
+    /* Get's the selected item from the list view and returns a snippet. */
     fn get_selected_item(&self)->Snippet{
         let imp = imp::Window::from_instance(self);
         let sel_model = imp.list_view.model().unwrap();
