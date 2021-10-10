@@ -2,12 +2,14 @@ mod snippet_object;
 mod snippet_row;
 mod window;
 
-use gtk::prelude::*;
-use gtk::Application;
-
-use window::Window;
 #[macro_use]
 extern crate lazy_static;
+extern crate copypasta;
+
+use gtk::prelude::*;
+use gtk::Application;
+use window::Window;
+use copypasta::{ClipboardContext, ClipboardProvider};
 
 fn main() {
     // Initialize logger

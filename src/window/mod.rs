@@ -1,20 +1,22 @@
+mod imp;
+use snippetlibrary::*;
+use crate::snippet_object::SnippetObject;
+use crate::snippet_row::SnippetRow;
+
 use glib::{clone, Object};
 use gtk::{gio, glib, SingleSelection, SelectionModel};
 use gtk::{Application, NoSelection, SignalListItemFactory};
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-
-use snippetlibrary::*;
-
-use crate::snippet_object::SnippetObject;
-use crate::snippet_row::SnippetRow;
 use sourceview5::prelude::{BufferExt, ViewExt};
 use sourceview5::LanguageManager;
 use std::rc::Rc;
 use std::cell::RefCell;
 use gtk::gio::SimpleAction;
+use copypasta::{ClipboardContext, ClipboardProvider};
 
-mod imp;
+
+
 
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
@@ -78,7 +80,7 @@ impl Window {
             list_item.set_child(Some(&snippet_row));
         });
 
-        // Tell factory how to bind `TodoRow` to a `SnippetObject`
+        // Tell factory how to bind `SnippetRow` to a `SnippetObject`
         factory.connect_bind(move |_, list_item| {
             // Get `SnippetObject` from `ListItem`
             let snippet_object = list_item
@@ -154,9 +156,14 @@ impl Window {
         let imp = imp::Window::from_instance(self);
         let original_state = 0;
         let action_copy = SimpleAction::new_stateful("copy",None,&original_state.to_variant());
-        action_copy.connect_activate(|action,parameter| {
+
+        action_copy.connect_activate(clone!(@strong self as this => move |action,parameter| {
             println!("received action copy");
-        });
+            let snip = this.get_selected_item();
+            let mut ctx = ClipboardContext::new().unwrap();
+            ctx.set_contents(snip.content().to_owned()).unwrap();
+            println!("{:?}",ctx.get_contents());
+        }));
         self.add_action(&action_copy);
     }
 
@@ -171,5 +178,20 @@ impl Window {
         let buffer = sourceview.buffer();
         println!("{:?}",buffer);
         buffer.set_text(&snip.content().to_string());
+    }
+
+    pub fn copy_selected_snippet(&self){
+
+    }
+
+    fn get_selected_item(&self)->Snippet{
+        let imp = imp::Window::from_instance(self);
+        let sel_model = imp.list_view.model().unwrap();
+        let sel_idx = sel_model.selection_in_range(0,1).nth(0);
+
+        let item = sel_model.item(sel_idx).unwrap().downcast::<SnippetObject>().expect("Nope");
+        let path = item.property("path").unwrap().transform::<String>().unwrap().get::<String>().unwrap();
+
+        Snippet::new(path)
     }
 }
